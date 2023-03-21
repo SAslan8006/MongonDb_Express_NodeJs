@@ -1,25 +1,25 @@
-const nodemailer = require("nodemailer")
+const nodemailer = require('nodemailer');
+const APIError = require('./errors');
 
 const sendEmail = async (mailOptions) => {
-    
-    // create reusable transporter object using the default SMTP transport
-    const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true, // true for 465, false for other ports
-        auth: {
-          user: process.env.NODE_MAIL, // generated ethereal user
-          pass: process.env.NODE_PASS, // generated ethereal password
-        },
-      });
+  const transporter = await nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // true for 465, false for other ports
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log("Hata Çıktı Mail Gönderilemedi : ", error);
-        }
-        console.log("info : ",info);
-        return true
-    })
-}
+  await transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Hata Çıktı Mail Gönderilemedi : ', error);
+      throw new APIError('Mail Gönderilemedi !');
+    }
+    console.log('info : ', info);
+    return true;
+  });
+};
 
-module.exports = sendEmail
+module.exports = sendEmail;
