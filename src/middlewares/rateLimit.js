@@ -10,7 +10,7 @@ const apiLimiter = rateLimit({
     },
     message: {
         success: false,
-        message: "Çok fazla istekte bulundunuz !"
+        message: "Çok fazla istekte bulundunuz geçici olarak engellendiniz!"
     },
     skip: (req, res) => allowList.includes(req.ip),
     standardHeaders: true,
